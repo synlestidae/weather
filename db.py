@@ -7,19 +7,16 @@ conn = get_connection()
 
 c = conn.cursor() 
 # Create table
-c.execute("CREATE TABLE IF NOT EXISTS Users (uid INT IDENTITY PRIMARY KEY, email_address NVARCHAR)")
 c.execute('''CREATE TABLE IF NOT EXISTS OAuthDetails 
   (id INT IDENTITY PRIMARY KEY,
-  uid INT IDENTITY NOT NULL, 
   refresh_token NVARCHAR, 
-  access_token NVARCHAR, 
-  access_token_expiry_utc DATETIME,
-  FOREIGN KEY (uid) REFERENCES Users(uid))''')
+  access_token NVARCHAR)''')
+
 c.execute('''CREATE TABLE IF NOT EXISTS UpdateJobs 
   (id INT IDENTITY PRIMARY KEY,
   uid INT IDENTITY, 
   last_update_time DATETIME, 
-  FOREIGN KEY (uid) REFERENCES Users(uid))''');
+  FOREIGN KEY (uid) REFERENCES OAuthDetails(uid))''');
 
 # Insert a row of data
 #/c.execute("INSERT INTO stocks VALUES ('2006-01-05','BUY','RHAT',100,35.14)")

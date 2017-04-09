@@ -1,7 +1,9 @@
 from oauth2client.client import flow_from_clientsecrets
 
-def random_state_string():
-  N = 32
+def random_state_string(N=32):
+  return random_string()
+
+def random_string(N=32):
   return ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(N))
 
 def get_flow():

@@ -1,9 +1,12 @@
 from flask import Flask, render_template, request
 from oauth2 import get_flow 
 import httplib2
+from datetime import datetime
 from apiclient import discovery
 from user import Users
 from db import get_connection
+from weather import WeatherReport
+from google_calendar import GoogleCalendar
 
 app = Flask(__name__)
 
@@ -30,16 +33,14 @@ def authorise_new_user():
   conn = get_connection()
   cursor = conn.cursor()
 
-  #Identify the user
-  #credentials = get_credentials()
-  #http = credentials.authorize(httplib2.Http())
-  #service = discovery.build('people', 'v1', http=http,
-  #  discoveryServiceUrl='https://people.googleapis.com/$discovery/rest') 
-  #people_service = service.people()
-  #print(dir(service))
-  #print(dir(people_service))
-  
-  user = Users(cursor)
+  users = Users(cursor)
+  report = WeatherReport('wellington')
+  user.register_user(access_token, refresh_token)
+  google_calendar = GoogleCalendar(credentials, httplib2.Http())
+  date_now = datetime.utcnow()
+  google_calendar.set_daily_report(date_now, report.brief_summary(), 
+    report.full_summary())
+
   raise "Not yet implemented"
 
 if __name__ == "__main__":
