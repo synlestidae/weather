@@ -12,7 +12,9 @@ c.execute('''CREATE TABLE IF NOT EXISTS OAuthDetails
   (id INT IDENTITY PRIMARY KEY,
   uid INT IDENTITY NOT NULL, 
   refresh_token NVARCHAR, 
-  access_token NVARCHAR, FOREIGN KEY (uid) REFERENCES Users(uid))''')
+  access_token NVARCHAR, 
+  access_token_expiry_utc DATETIME,
+  FOREIGN KEY (uid) REFERENCES Users(uid))''')
 c.execute('''CREATE TABLE IF NOT EXISTS UpdateJobs 
   (id INT IDENTITY PRIMARY KEY,
   uid INT IDENTITY, 

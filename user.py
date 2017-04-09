@@ -12,8 +12,8 @@ class Users:
   def register_user(self, email_address):
     self.cursor.execute('INSERT INTO Users VALUES (?)', email_address)
 
-  def get_email_by_uid(self, uid):
-    result = self.cursor.execute('SELECT uid FROM Users where email_address=?', uid).fetchone()
+  def get_uid_from_email(self, email_address):
+    result = self.cursor.execute('SELECT uid FROM Users where email_address=?', email_address).fetchone()
     return result[0]
 
   def set_access_token(self, uid, access_token):

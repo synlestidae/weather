@@ -1,4 +1,4 @@
-class Calendar:
+class GoogleCalendar:
   def __init__(self):
     pass
 
@@ -7,8 +7,7 @@ class Calendar:
 
 
 class CalendarObj:
-  def __init__(self, cursor):
-    self.cursor = cursor
+  def __init__(self):
     pass
 
   def clear_event(self):
