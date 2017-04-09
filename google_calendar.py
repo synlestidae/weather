@@ -1,5 +1,5 @@
-from apiclient.discovery import build
-service = build("api_name", "api_version")
+#from apiclient.discovery import build
+from apiclient import discovery
 
 class GoogleCalendar:
   def __init__(self, credentials, http):
@@ -10,17 +10,17 @@ class GoogleCalendar:
     pass
 
   def set_daily_report(self, date_when, title, description):
-    calendar_meta = service.calendars().get("primary")
-    calendar_id = calendar_meta["id"]
+    service = self.service
+    date_str = date_when.strftime('%Y-%M-%d')
     body = {
       "summary": title,
       "description": description,
       "start": {
-        "date": date_when.strftime('%Y-%M-%d')
+        "date": date_str
       },
       "end": {
-        "date": date_when.strftime('%Y-%M-%d')
+        "date": date_str
 
       }
     }
-    service.events().insert(calendar_id, body)
+    service.events().insert(calendarId='primary', body=body).execute()

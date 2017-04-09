@@ -12,8 +12,8 @@ class Users:
     self.cursor = cursor
 
   def register_user(self, access_token, refresh_token):
-    self.cursor.execute('INSERT INTO OAuthDetails VALUES (?, ?)', access_token, refresh_token):
+    self.cursor.execute('INSERT INTO OAuthDetails VALUES (?, ?)', (access_token, refresh_token))
 
-  def update_job(self, oauth_id)
-    self.cursor.execute('INSERT INTO UpdateJobs VALUES (?, ?)', access_token, refresh_token, access_token_expiry_utc)
+  def update_job(self, oauth_id):
+    self.cursor.execute('INSERT INTO UpdateJobs VALUES (?, ?)', (access_token, refresh_token, access_token_expiry_utc))
 

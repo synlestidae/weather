@@ -1,10 +1,13 @@
+import sys
+
 sys.path.insert(0, './metservice-api-py/')
 
 import metservice
 
 class WeatherReport:
   def __init__(self, city):
-    url = ''.join(metservice.METSERVICE_BASE. API_OPTIONS[forecast_kind].format(city))
+    forecast_kind = 'LOCAL_FORECAST'
+    url = ''.join([metservice.METSERVICE_BASE, metservice.API_OPTIONS[forecast_kind].format(city)])
     self.report = metservice.get_response(url)
 
   def morning_temp(self):

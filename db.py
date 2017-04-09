@@ -8,15 +8,14 @@ conn = get_connection()
 c = conn.cursor() 
 # Create table
 c.execute('''CREATE TABLE IF NOT EXISTS OAuthDetails 
-  (id INT IDENTITY PRIMARY KEY,
-  refresh_token NVARCHAR, 
+  (refresh_token NVARCHAR, 
   access_token NVARCHAR)''')
 
 c.execute('''CREATE TABLE IF NOT EXISTS UpdateJobs 
   (id INT IDENTITY PRIMARY KEY,
-  uid INT IDENTITY, 
+  uid INTEGER IDENTITY, 
   last_update_time DATETIME, 
-  FOREIGN KEY (uid) REFERENCES OAuthDetails(uid))''');
+  FOREIGN KEY (uid) REFERENCES OAuthDetails(ROWID))''');
 
 # Insert a row of data
 #/c.execute("INSERT INTO stocks VALUES ('2006-01-05','BUY','RHAT',100,35.14)")
