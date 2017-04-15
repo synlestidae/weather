@@ -12,6 +12,13 @@ c.execute('''CREATE TABLE IF NOT EXISTS OAuthDetails
   refresh_token NVARCHAR, 
   access_token NVARCHAR)''')
 
+c.execute('''CREATE TABLE IF NOT EXISTS WeatherLocation
+  (google_plus_id NVARCHAR,
+  location_name NVARCHAR,
+  FOREIGN KEY (google_plus_id) REFERENCES OAuthDetails(google_plus_id),
+  CONSTRAINT WeatherLocation_PK PRIMARY KEY (google_plus_id, location_name)
+  )''')
+
 c.execute('''CREATE TABLE IF NOT EXISTS UpdateJobs 
   (id INT IDENTITY PRIMARY KEY AUTOINCREMENT,
   uid NVARCHAR, 

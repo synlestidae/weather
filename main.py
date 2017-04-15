@@ -51,6 +51,8 @@ def authorise_new_user():
   else:
     user.register_user(person_id, access_token, refresh_token)
 
+  users.add_location(person_id, "wellington")
+
   #now actually post the weather report
   report = WeatherReport('wellington')
   google_calendar = GoogleCalendar(credentials, httplib2.Http())
@@ -58,7 +60,9 @@ def authorise_new_user():
   users.update_job(person_id)
 
   for day_report in report.get_days():
-    google_calendar.set_daily_report(day_report.date, day_report.brief_summary, day_report.full_summary)
+    google_calendar.set_daily_report(day_report.date, 
+      day_report.brief_summary, 
+      day_report.full_summary)
 
   return render_template("done.html")
 

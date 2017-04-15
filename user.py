@@ -15,6 +15,16 @@ class Users:
     self.cursor.execute('INSERT INTO OAuthDetails VALUES (?, ?, ?)', (user_id, access_token, refresh_token))
     self.cursor.commit()
 
+  def add_location(self, user_id, location_name):
+    if location_name not in self.get_locations(user_id):
+      self.cursor.execute('INSERT INTO WeatherLocations VALUES (?, ?)', 
+        (user_id, location_name))
+      self.cursor.commit()
+
+  def get_locations(self, user_id):
+    result = self.cursor.execute("SELECT * WeatherLocation OAuthDetails WHERE google_plus_id=?", (user_id))
+    return result.fetch()
+
   def update_credentials(self, user_id, access_token, refresh_token):
     self.cursor.execute('UPDATE OAuthDetails SET access_token=?, refresh_token=?', (user_id, access_token, refresh_token))
     self.cursor.commit()
