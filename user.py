@@ -1,6 +1,8 @@
 import db
 from oauth2 import random_string
+from oauth2.client import AccessTokenCredentials, client, GOOGLE_TOKEN_URI, GOOGLE_REVOKE_URI
 from datetime import datetime
+import json
 
 def get_users_obj():
   conn = db.get_connection()
@@ -14,6 +16,10 @@ class Users:
   def register_user(self, user_id, access_token, refresh_token):
     self.cursor.execute('INSERT INTO OAuthDetails VALUES (?, ?, ?)', (user_id, access_token, refresh_token))
     self.cursor.commit()
+
+  def get_users(self):
+    result = self.cursor.execute("SELECT google_plus_id FROM OAuthDetails")
+    return map(lambda row: row[0], result.fetch())
 
   def add_location(self, user_id, location_name):
     if location_name not in self.get_locations(user_id):
@@ -34,9 +40,27 @@ class Users:
     return len(result.fetchone()) > 0
 
   def get_credentials(self, user_id):
-    result = self.cursor.execute("SELECT access_token from OAuthDetails WHERE google_plus_id=?", (user_id))
+    result = self.cursor.execute("SELECT access_token, refresh_token from OAuthDetails WHERE google_plus_id=?", (user_id))
     row = result.fetchone()
-    access_token = row[0]
+    access_token = row[0][0]
+    refresh_token = row[0][1]
+    http = Http()
+    credentials = AccessTokenCredentials(access_token, "antunovic-calendar-client/1.0")
+    token_info = credentals.get_access_token(http)
+
+    if token_info.expires_in > 60 * 2:
+      return credentials 
+
+    with open("client_secrets.json") as client_secrets_file:
+      data = json.load(client_secrets_file)  
+      token_uri = data["web"]["token_uri"]
+      client_id = data["web"]["client_id"]
+      client_secret = data["web"]["client_secret"]
+      google_token_uri = data["web"]["client_id"]
+
+      return client.OAuth2Credentials(None, client_id, client_secret, 
+        refresh_token, None, GOOGLE_TOKEN_URI, None, 
+        revoke_uri=GOOGLE_REVOKE_URI)
 
   def update_job(self, user_id):
     self.cursor.execute('INSERT INTO UpdateJobs VALUES (?, ?, ?)', (user_id, datetime.utcnow()))
