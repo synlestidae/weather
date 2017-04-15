@@ -20,7 +20,7 @@ c.execute('''CREATE TABLE IF NOT EXISTS WeatherLocation
   )''')
 
 c.execute('''CREATE TABLE IF NOT EXISTS UpdateJobs 
-  (id INT IDENTITY PRIMARY KEY AUTOINCREMENT,
+  (id INTEGER PRIMARY KEY AUTOINCREMENT,
   uid NVARCHAR, 
   last_update_time DATETIME, 
   FOREIGN KEY (uid) REFERENCES OAuthDetails(google_plus_id))''');

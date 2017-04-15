@@ -26,7 +26,7 @@ def authorise_new_user():
   code = request.args.get('code')
   state = request.args.get('state')
   credentials = flow.step2_exchange(code)
-  access_token = credentials.get_access_token()
+  access_token = credentials.get_access_token().access_token
   refresh_token = credentials.refresh_token
 
   #init http object used by requests

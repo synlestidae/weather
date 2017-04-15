@@ -1,6 +1,8 @@
 import db
 from oauth2 import random_string
-from oauth2.client import AccessTokenCredentials, client, GOOGLE_TOKEN_URI, GOOGLE_REVOKE_URI
+from oauth2client.client import AccessTokenCredentials
+from oauth2client import GOOGLE_TOKEN_URI, GOOGLE_REVOKE_URI
+from oauth2client import client
 from datetime import datetime
 import json
 
@@ -14,6 +16,7 @@ class Users:
     self.cursor = cursor
 
   def register_user(self, user_id, access_token, refresh_token):
+    print "USER!", user_id, access_token, refresh_token
     self.cursor.execute('INSERT INTO OAuthDetails VALUES (?, ?, ?)', (user_id, access_token, refresh_token))
     self.cursor.commit()
 
