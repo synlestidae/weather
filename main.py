@@ -35,10 +35,6 @@ def authorise_new_user():
 
   users = Users(cursor)
   report = WeatherReport('wellington')
-  print("THe stuff", str(access_token), str(refresh_token), type(access_token), type(refresh_token))
-  print(dir(refresh_token))
-  print(dir(access_token))
-  #users.register_user(access_token, refresh_token)
   google_calendar = GoogleCalendar(credentials, httplib2.Http())
   date_now = datetime.utcnow()
   google_calendar.set_daily_report(date_now, report.brief_summary(), 
