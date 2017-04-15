@@ -10,7 +10,9 @@ def random_string(N=32):
 
 def get_flow():
   flow = flow_from_clientsecrets('client_secrets.json',
-    scope='https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/user.emails.read',
+    scope='https://www.googleapis.com/auth/plus.me https://www.googleapis.com/auth/calendar',
     redirect_uri='http://localhost:5000/oauth/google')
+  flow.params['access_type'] = 'offline'
+  flow.params['include_granted_scopes'] = "true"
   return flow
 

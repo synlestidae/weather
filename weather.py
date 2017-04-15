@@ -37,7 +37,8 @@ class DayReport:
     min_temp = self.day_report["min"]
     temp_forecast = "High of %sC and low of %sC" % (high_temp, min_temp)
     full_day_report = "%s. %s" % (temp_forecast, self.brief_summary)
-    if ("partDayData" in self.day_report):
+
+    if "partDayData" in self.day_report:
       report = self.day_report["partDayData"]
       for period in ["morning", "afternoon", "evening", "overnight"]:
         full_day_report = "%s\n%s: %s." % (full_day_report, period, report[period]['forecastWord'])

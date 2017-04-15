@@ -48,24 +48,13 @@ class GoogleCalendar:
         if okay_to_delete(event, now):
           iCalUID = event["iCalUID"]
           service.events().delete(calendarId='primary', eventId=iCalUID) 
-        print event
-        print "Deleted", iCalUID
-    #service.events().insert(calendarId='primary', body=body).execute()
-    #events = result.get('items', [])
-    #for event in events:
-      #print "EVENT"
-      #print event 
-      #print dir(event)
-      #for event in results.items:
-      #  service.events().delete(calendarId='primary', eventId=event.iCalUID) 
 
 def okay_to_delete(event, now):
   now = now.date()
-  date_string = event["date"][0:10]
-  date = datetime.strptime(date_string, "%Y-%m-%d")
+  date_string = event["start"]["date"][0:10]
+  date = datetime.strptime(date_string, "%Y-%m-%d").date()
   if (date < now):
     return False
   props = event["extendedProperties"]
-  #inspect the date
   if "private" in props and VERSION_FIELD in props["private"]:
     return True
