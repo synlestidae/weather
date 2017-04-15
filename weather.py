@@ -40,7 +40,7 @@ class DayReport:
     if ("partDayData" in self.day_report):
       report = self.day_report["partDayData"]
       for period in ["morning", "afternoon", "evening", "overnight"]:
-        full_day_report = "%s\n%s: %s." % (full_day_report, period, report[period])
+        full_day_report = "%s\n%s: %s." % (full_day_report, period, report[period]['forecastWord'])
 
     return full_day_report
 

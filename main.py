@@ -36,12 +36,12 @@ def authorise_new_user():
   users = Users(cursor)
   report = WeatherReport('wellington')
   google_calendar = GoogleCalendar(credentials, httplib2.Http())
-  date_now = datetime.utcnow()
-  google_calendar.set_daily_report(date_now, report.brief_summary(), 
-    report.full_summary())
 
-  return render_template("done.html", oauth_url=auth_uri)
+  for day_report in report.get_days():
+    google_calendar.set_daily_report(day_report.date, day_report.brief_summary, day_report.full_summary)
+
+  return render_template("done.html")
 
 
 if __name__ == "__main__":
-  app.run()
+  app.run(debug=True)
