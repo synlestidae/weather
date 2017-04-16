@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from oauth2 import get_flow 
+from oauth2 import get_flow
 import httplib2
 from datetime import datetime
 from apiclient import discovery
@@ -15,25 +15,28 @@ app = Flask(__name__)
 
 scopes = ["https://www.googleapis.com/auth/calendar"]
 
+
 @app.route("/")
 def root():
-  flow = get_flow()
-  auth_uri = flow.step1_get_authorize_url()
-  return render_template("index.html", oauth_url=auth_uri)
+    flow = get_flow()
+    auth_uri = flow.step1_get_authorize_url()
+    return render_template("index.html", oauth_url=auth_uri)
+
 
 @app.route("/oauth/google")
 def authorise_new_user():
-  code = request.args.get("code")
-  state = request.args.get("state")
-  conn = get_connection()
-  users = Users(conn)
-  person_id = authorise_user(code, state, conn=conn)
-  users.add_location(person_id, "wellington")
-  ensure_calendar_updated(person_id, conn) 
-  return render_template("done.html")
+    code = request.args.get("code")
+    state = request.args.get("state")
+    conn = get_connection()
+    users = Users(conn)
+    person_id = authorise_user(code, state, conn=conn)
+    users.add_location(person_id, "wellington")
+    ensure_calendar_updated(person_id, conn)
+    return render_template("done.html")
+
 
 if __name__ == "__main__":
-  app.run(debug=True)
+    app.run(debug=True)
 
 conn = get_connection()
 setup_database(conn)
