@@ -25,7 +25,8 @@ class Users:
         with self.conn:
             result = self.conn.execute(
                 "SELECT google_plus_id FROM OAuthDetails")
-            return map(lambda row: row[0], result.fetchall())
+            rows = result.fetchall()
+            return map(lambda row: row[0], rows)
 
     def add_location(self, user_id, location_name):
         with self.conn:

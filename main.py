@@ -40,3 +40,4 @@ if __name__ == "__main__":
 
 conn = get_connection()
 setup_database(conn)
+del conn

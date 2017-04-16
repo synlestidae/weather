@@ -2,7 +2,8 @@ from user import Users
 from db import get_connection 
 from update import ensure_calendar_updated
 
-if __name__ == "main":
+if __name__ == "__main__":
+    print "Starting up"
     conn = get_connection()
     users = Users(conn)
     for person_id in users.get_users():
