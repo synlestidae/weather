@@ -44,7 +44,6 @@ class Users:
         with self.conn:
             self.conn.execute('UPDATE OAuthDetails SET access_token=?, refresh_token=? WHERE google_plus_id=?',
                               (access_token, refresh_token, user_id, ))
-        # self.conn.commit()
 
     def user_exists(self, user_id):
         with self.conn:

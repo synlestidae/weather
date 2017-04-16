@@ -3,8 +3,10 @@
   <head>
     <meta charset="UTF-8">
     <title>title</title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/Flat-UI-master/dist/css/flat-ui.min.css') }}">
   </head>
   <body>
-    <a href="{{oauth_url}}">Get the weather</a> 
+      <a href="{{oauth_url}}"><span class="fa fa-cloud" aria-hidden="true"></span>Get the weather</a> 
   </body>
 </html>
