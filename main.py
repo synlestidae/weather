@@ -10,6 +10,7 @@ from google_calendar import GoogleCalendar
 from update import ensure_calendar_updated
 from httplib2 import Http
 from app import authorise_user
+from weather_config import get_config
 
 app = Flask(__name__)
 
@@ -36,7 +37,8 @@ def authorise_new_user():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    config = get_config()
+    app.run(debug=config.debug)
 
 conn = get_connection()
 setup_database(conn)

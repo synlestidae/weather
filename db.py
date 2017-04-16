@@ -1,8 +1,9 @@
 import sqlite3
-
+from weather_config import get_config
 
 def get_connection():
-    return sqlite3.connect('database.db')
+    config = get_config()
+    return sqlite3.connect(config.db_path)
 
 
 def setup_database(conn):
