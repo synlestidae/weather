@@ -1,0 +1,20 @@
+{
+  "kind": "plus#person", 
+  "displayName": "Mate Antunovic", 
+  "name": {
+    "givenName": "Mate", 
+    "familyName": "Antunovic"
+  }, 
+  "isPlusUser": true, 
+  "url": "https://plus.google.com/111102478841690531929", 
+  "gender": "male", 
+  "image": {
+    "url": "https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=50", 
+    "isDefault": true
+  }, 
+  "etag": "\"Sh4n9u6EtD24TM0RmWv7jTXojqc/TWh9sswdppSB2CfEfwhNwgqYTfU\"", 
+  "verified": false, 
+  "circledByCount": 10, 
+  "id": "111102478841690531929", 
+  "objectType": "person"
+}

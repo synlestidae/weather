@@ -18,32 +18,37 @@ class Users:
   def register_user(self, user_id, access_token, refresh_token):
     print "USER!", user_id, access_token, refresh_token
     self.cursor.execute('INSERT INTO OAuthDetails VALUES (?, ?, ?)', (user_id, access_token, refresh_token))
-    self.cursor.commit()
+    #self.cursor.commit()
 
   def get_users(self):
     result = self.cursor.execute("SELECT google_plus_id FROM OAuthDetails")
-    return map(lambda row: row[0], result.fetch())
-
+    return map(lambda row: row[0], result.fetchall()) 
   def add_location(self, user_id, location_name):
     if location_name not in self.get_locations(user_id):
-      self.cursor.execute('INSERT INTO WeatherLocations VALUES (?, ?)', 
+      self.cursor.execute('INSERT INTO WeatherLocation VALUES (?, ?)', 
         (user_id, location_name))
-      self.cursor.commit()
+      #self.cursor.commit()
 
   def get_locations(self, user_id):
-    result = self.cursor.execute("SELECT * WeatherLocation OAuthDetails WHERE google_plus_id=?", (user_id))
-    return result.fetch()
+    result = self.cursor.execute("SELECT * FROM WeatherLocation OAuthDetails WHERE google_plus_id=?", (user_id,))
+    print dir(result)
+    return result.fetchall()
 
   def update_credentials(self, user_id, access_token, refresh_token):
     self.cursor.execute('UPDATE OAuthDetails SET access_token=?, refresh_token=?', (user_id, access_token, refresh_token))
-    self.cursor.commit()
+    #self.cursor.commit()
 
   def user_exists(self, user_id):
-    result = self.cursor.execute("SELECT * FROM OAuthDetails WHERE google_plus_id=?", (user_id))  
-    return len(result.fetchone()) > 0
+    print "usy", user_id
+    result = self.cursor.execute("SELECT * FROM OAuthDetails WHERE google_plus_id=?", (user_id,))  
+    if result is not None:
+      fetched_row = result.fetchone()
+      if fetched_row is not None:
+        return len(fetched_row) > 0
+    return False
 
   def get_credentials(self, user_id):
-    result = self.cursor.execute("SELECT access_token, refresh_token from OAuthDetails WHERE google_plus_id=?", (user_id))
+    result = self.cursor.execute("SELECT access_token, refresh_token from OAuthDetails WHERE google_plus_id=?", (user_id,))
     row = result.fetchone()
     access_token = row[0][0]
     refresh_token = row[0][1]
@@ -67,7 +72,7 @@ class Users:
 
   def update_job(self, user_id):
     self.cursor.execute('INSERT INTO UpdateJobs VALUES (?, ?, ?)', (user_id, datetime.utcnow()))
-    self.cursor.commit()
+    #self.cursor.commit()
 
   def last_update_time(user_id):
     result = self.cursor.execute("SELECT last_update_time FROM UpdateJobs WHERE uid=? ORDER BY last_update_time DESC")

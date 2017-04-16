@@ -4,7 +4,7 @@ import httplib2
 from datetime import datetime
 from apiclient import discovery
 from user import Users
-from db import get_connection
+from db import get_connection, setup_database
 from weather import WeatherReport
 from google_calendar import GoogleCalendar
 from httplib2 import Http
@@ -21,50 +21,12 @@ def root():
 
 @app.route("/oauth/google")
 def authorise_new_user():
-  #Get access and refresh tokens
-  flow = get_flow()
-  code = request.args.get('code')
-  state = request.args.get('state')
-  credentials = flow.step2_exchange(code)
-  access_token = credentials.get_access_token().access_token
-  refresh_token = credentials.refresh_token
-
-  #init http object used by requests
-  http = Http()
-  credentials.authorize(http)
-
-  #Identify this person
-  people_resource = discovery.build("plus", "v1", http=http)
-  people_document = people_resource.people().get(userId="me").execute()
-  person_id = people_document["id"]
-
-  #Connect to DB - used for managing users
-  conn = get_connection()
-  cursor = conn.cursor()
-
-  #Register the user or update credentials
-  users = Users(cursor)
-  users.register_user(person_id, access_token, refresh_token)
-
-  if users.user_exists(person_id):
-    user.update_credentials(person_id, access_token, refresh_token)
-  else:
-    user.register_user(person_id, access_token, refresh_token)
-
-  users.add_location(person_id, "wellington")
-
-  #now actually post the weather report
-  report = WeatherReport('wellington')
-  google_calendar = GoogleCalendar(credentials, httplib2.Http())
-
-  users.update_job(person_id)
-
-  for day_report in report.get_days():
-    google_calendar.set_daily_report(day_report.date, 
-      day_report.brief_summary, 
-      day_report.full_summary)
-
+  person_id = app.authorise_user(code, state)
+  ensure_calendar_updated(person_id) 
   return render_template("done.html")
 
 if __name__ == "__main__":
   app.run(debug=True)
+
+conn = get_connection()
+setup_database(conn)
