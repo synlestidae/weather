@@ -47,6 +47,14 @@ class test_XXX_Test_Group_Name(unittest.TestCase):
           self.oauth_http,
           self.connect())
         self.assertEqual(len(users.get_users()), 1)
+
+    def test_adds_one_user_to_database(self):
+        users = Users(self.connect())
+        person_id = authorise_user("4/7J5j83SwLmZGEg6mADDnotLWdZnMyiRZFzOIWtE1Wxk", "",
+          self.oauth_http,
+          self.connect())
+        self.assertEqual(len(users.get_users()), 1)
+
     #  Examples:
     # self.assertEqual(fp.readline(), 'This is a test')
     # self.assertFalse(os.path.exists('a'))

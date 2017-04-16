@@ -9,23 +9,21 @@ from weather import WeatherReport
 from google_calendar import GoogleCalendar
 from httplib2 import Http
 
-def ensure_calendar_updated(person_id):
-  conn = get_connection()
-  cursor = conn.cursor()
-  http = httplib2.Http()
-  users = Users(cursor)
+def ensure_calendar_updated(person_id, conn, http=Http()):
+  users = Users(conn)
 
-  last_update_time = users.last_update_time()
-  if (last_update_time - datetime.utcnow()).total_seconds() < 60 * 60 * 4:
-    return update_calendar_one_user(person_id, cursor, http)
+  last_update_time = users.last_update_time(person_id)
 
-def update_calendar_one_user(person_id, cursor, http):
+  if last_update_time and (last_update_time - datetime.utcnow()).total_seconds() < 60 * 60 * 4:
+    return update_calendar_one_user(person_id, users, http)
+
+def update_calendar_one_user(person_id, users, http):
   #Register the user or update credentials
-  users = Users(cursor)
-
   locations = users.get_locations(person_id)
+
   if len(locations) < 1:
     return
+
   location = locations[0]
 
   #now actually post the weather report

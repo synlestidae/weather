@@ -7,7 +7,9 @@ from user import Users
 from db import get_connection, setup_database
 from weather import WeatherReport
 from google_calendar import GoogleCalendar
+from update import ensure_calendar_updated
 from httplib2 import Http
+from app import authorise_user
 
 app = Flask(__name__)
 
@@ -21,8 +23,13 @@ def root():
 
 @app.route("/oauth/google")
 def authorise_new_user():
-  person_id = app.authorise_user(code, state)
-  ensure_calendar_updated(person_id) 
+  code = request.args.get("code")
+  state = request.args.get("state")
+  conn = get_connection()
+  users = Users(conn)
+  person_id = authorise_user(code, state, conn=conn)
+  users.add_location(person_id, "wellington")
+  ensure_calendar_updated(person_id, conn) 
   return render_template("done.html")
 
 if __name__ == "__main__":
