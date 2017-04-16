@@ -23,6 +23,7 @@ class Users:
   def get_users(self):
     result = self.cursor.execute("SELECT google_plus_id FROM OAuthDetails")
     return map(lambda row: row[0], result.fetchall()) 
+
   def add_location(self, user_id, location_name):
     if location_name not in self.get_locations(user_id):
       self.cursor.execute('INSERT INTO WeatherLocation VALUES (?, ?)', 

@@ -23,12 +23,11 @@ def authorise_user(code, state, http=Http(), conn=get_connection()):
 
   users = Users(cursor)
 
-  print person_id
-
   if users.user_exists(person_id):
     users.update_credentials(person_id, access_token, refresh_token)
   else:
     users.register_user(person_id, access_token, refresh_token)
 
   users.add_location(person_id, "wellington")
+  conn.commit()
   return person_id
