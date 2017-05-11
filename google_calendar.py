@@ -5,7 +5,6 @@ from datetime import datetime
 VERSION_FIELD = "weatherCalAntunovic"
 CURRENT_VERSION = "0.0.1"
 
-
 class GoogleCalendar:
     def __init__(self, credentials, http):
         self.http = credentials.authorize(http)

@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from flask import Flask, render_template, request
 from oauth2 import get_flow
 import httplib2
@@ -15,7 +17,9 @@ def ensure_calendar_updated(person_id, conn, http=Http()):
 
     last_update_time = users.last_update_time(person_id)
 
-    if last_update_time and (last_update_time - datetime.utcnow()).total_seconds() < 60 * 60 * 4:
+    print "lasting update", last_update_time, type(last_update_time)
+
+    if not last_update_time or (last_update_time and (last_update_time - datetime.utcnow()).total_seconds() < 60 * 60 * 4):
         return update_calendar_one_user(person_id, users, http)
 
 
@@ -30,14 +34,15 @@ def update_calendar_one_user(person_id, users, http):
 
     # now actually post the weather report
     report = WeatherReport(location)
-    credentials = users.get_credentials()
+    credentials = users.get_credentials(person_id)
+    credentials.refresh(http)
     google_calendar = GoogleCalendar(credentials, http)
 
     for day_report in report.get_days():
+        print day_report.brief_summary
         google_calendar.set_daily_report(day_report.date,
                                          day_report.brief_summary,
                                          day_report.full_summary)
 
     users.update_job(person_id)
 
-    return render_template("done.html")

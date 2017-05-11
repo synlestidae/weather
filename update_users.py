@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 from user import Users
 from db import get_connection 
 from update import ensure_calendar_updated

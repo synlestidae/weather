@@ -1,9 +1,14 @@
+#!/usr/bin/env python
+
 import db
 from oauth2 import random_string
 from oauth2client.client import AccessTokenCredentials
 from oauth2client import GOOGLE_TOKEN_URI, GOOGLE_REVOKE_URI
 from oauth2client import client
 from datetime import datetime
+import dateutil.parser
+print dir(dateutil.parser)
+from httplib2 import Http
 import json
 
 
@@ -17,6 +22,7 @@ class Users:
         self.conn = conn
 
     def register_user(self, user_id, access_token, refresh_token):
+        print "refresh tht shiw", refresh_token
         with self.conn:
             self.conn.execute('INSERT INTO OAuthDetails VALUES (?, ?, ?)',
                               (user_id, access_token, refresh_token))
@@ -61,13 +67,14 @@ class Users:
             result = self.conn.execute(
                 "SELECT access_token, refresh_token from OAuthDetails WHERE google_plus_id=?", (user_id,))
             row = result.fetchone()
-            access_token = row[0][0]
-            refresh_token = row[0][1]
+            access_token = row[0]
+            refresh_token = row[1]
+            print "tokens", refresh_token
             http = Http()
-            credentials = AccessTokenCredentials(
-                access_token, "antunovic-calendar-client/1.0")
-            token_info = credentals.get_access_token(http)
+            credentials = AccessTokenCredentials(access_token, "antunovic-calendar-client/1.0")
+            token_info = credentials.get_access_token(http)
 
+            print "Still okay? ", token_info.expires_in
             if token_info.expires_in > 60 * 2:
                 return credentials
 
@@ -85,7 +92,7 @@ class Users:
     def update_job(self, user_id):
         with self.conn:
             self.conn.execute(
-                'INSERT INTO UpdateJobs VALUES (?, ?, ?)', (user_id, datetime.utcnow()))
+                'INSERT INTO UpdateJobs VALUES (?, ?, ?)', (None, user_id, datetime.utcnow()))
 
     def last_update_time(self, user_id):
         with self.conn:
@@ -93,5 +100,6 @@ class Users:
                 "SELECT last_update_time FROM UpdateJobs WHERE uid=? ORDER BY last_update_time DESC", (user_id,))
             row_result = result.fetchone()
             if row_result is not None and len(row_result) > 0:
-                return row_result[0][0]
+                last_update_time = row_result[0]
+                return dateutil.parser.parse(last_update_time)
             return None
