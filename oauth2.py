@@ -17,4 +17,5 @@ def get_flow():
                                    redirect_uri='http://localhost:5000/oauth/google')
     flow.params['access_type'] = 'offline'
     flow.params['include_granted_scopes'] = "true"
+    flow.params['prompt'] = 'consent'
     return flow

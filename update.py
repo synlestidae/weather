@@ -3,7 +3,7 @@
 from flask import Flask, render_template, request
 from oauth2 import get_flow
 import httplib2
-from datetime import datetime
+from datetime import datetime, timedelta
 from apiclient import discovery
 from user import Users
 from db import get_connection
@@ -16,8 +16,6 @@ def ensure_calendar_updated(person_id, conn, http=Http()):
     users = Users(conn)
 
     last_update_time = users.last_update_time(person_id)
-
-    print "lasting update", last_update_time, type(last_update_time)
 
     if not last_update_time or (last_update_time and (last_update_time - datetime.utcnow()).total_seconds() < 60 * 60 * 4):
         return update_calendar_one_user(person_id, users, http)
@@ -37,9 +35,9 @@ def update_calendar_one_user(person_id, users, http):
     credentials = users.get_credentials(person_id)
     credentials.refresh(http)
     google_calendar = GoogleCalendar(credentials, http)
+    google_calendar.clear_event(datetime.utcnow())
 
     for day_report in report.get_days():
-        print day_report.brief_summary
         google_calendar.set_daily_report(day_report.date,
                                          day_report.brief_summary,
                                          day_report.full_summary)

@@ -26,3 +26,5 @@ def setup_database(conn):
         uid NVARCHAR, 
         last_update_time DATETIME, 
         FOREIGN KEY (uid) REFERENCES OAuthDetails(google_plus_id))''')
+
+        c.commit()
